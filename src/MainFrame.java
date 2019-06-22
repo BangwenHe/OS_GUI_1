@@ -154,11 +154,12 @@ public class MainFrame {
 
                     Procedure p = new Procedure(name, arrivalTime, runTime, priority, memory);
                     p.setCurState(State.READY);
-                    procedureList.addElement(p);
                     // todo 修改添加元素
-                    memoryAllocate(p);
-                    list1.setModel(procedureList);
-                    list2.setListData(memoryList.toArray());
+                    if (memoryAllocate(p)) {
+                        procedureList.addElement(p);
+                        list1.setModel(procedureList);
+                        list2.setListData(memoryList.toArray());
+                    }
 
                     if (isRunning) {
                         readyQueue.add(p);
@@ -307,7 +308,7 @@ public class MainFrame {
         }
     }
 
-    private void memoryAllocate(Procedure p) {
+    private boolean memoryAllocate(Procedure p) {
         int lastEnd;
         int curBegin;
         boolean isAllocated = false;
@@ -342,8 +343,11 @@ public class MainFrame {
         if (!isAllocated) {
             System.out.println("内存未分配成功!");
             JOptionPane.showMessageDialog(null, "进程所需内存过大, 无法分配内存!");
+            return false;
         }
-
-        System.out.println(memoryList.getSize());
+        else {
+            System.out.println(memoryList.getSize());
+            return true;
+        }
     }
 }
